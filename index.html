@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,108 +12,249 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0; padding: 0; min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
       background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 40%, #fdf2f8 100%);
       color: #1e293b;
     }
+
     .header {
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4c1d95 100%);
-      padding: 40px 24px 50px; text-align: center; position: relative; overflow: hidden;
+      padding: 40px 24px 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
+
     .header::before {
-      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-      background: radial-gradient(circle at 30% 50%, rgba(99,102,241,0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 50%, rgba(168,85,247,0.1) 0%, transparent 50%);
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
       pointer-events: none;
     }
+
     .header h1 {
-      margin: 0 0 8px; font-size: 32px; font-weight: 700; color: #e0e7ff;
-      letter-spacing: -0.5px; position: relative;
+      margin: 0 0 8px;
+      font-size: 32px;
+      font-weight: 700;
+      color: #e0e7ff;
+      letter-spacing: -0.5px;
+      position: relative;
     }
-    .header p { margin: 0; font-size: 16px; color: #a5b4fc; font-weight: 400; position: relative; }
+
+    .header p {
+      margin: 0;
+      font-size: 16px;
+      color: #a5b4fc;
+      font-weight: 400;
+      position: relative;
+    }
+
     .header .badge {
-      display: inline-block; margin-top: 12px; padding: 6px 16px;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px; font-size: 13px; color: #c7d2fe; position: relative;
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      font-size: 13px;
+      color: #c7d2fe;
+      position: relative;
     }
+
     main {
-      max-width: 1250px; margin: -24px auto 40px; padding: 0 24px; position: relative;
+      max-width: 1250px;
+      margin: -24px auto 40px;
+      padding: 0 24px;
+      position: relative;
     }
+
     .card {
-      background: white; border-radius: 16px; padding: 32px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
-      border: 1px solid rgba(0,0,0,0.04); overflow-x: auto;
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      overflow-x: auto;
       transition: box-shadow 0.3s ease;
     }
-    .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04); }
-    #visualization { display: flex; justify-content: center; min-height: 400px; }
-    .footer { text-align: center; padding: 24px; color: #94a3b8; font-size: 13px; }
-    .footer span { color: #6366f1; font-weight: 500; }
+
+    .card:hover {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    #visualization {
+      display: flex;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .footer span {
+      color: #6366f1;
+      font-weight: 500;
+    }
+
     .loading {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 80px 0; color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+      color: #94a3b8;
     }
+
     .loading .spinner {
-      width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #6366f1;
-      border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     #vg-tooltip-element {
-      font-family: 'Inter', sans-serif !important; border-radius: 8px !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+      font-family: 'Inter', sans-serif !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     }
+
     /* ── View Selector ── */
     .controls {
-      display: flex; align-items: center; gap: 14px;
-      margin-bottom: 24px; padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding: 14px 20px;
       background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      border-radius: 12px; border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
     }
+
     .controls label {
-      font-weight: 600; font-size: 14px; color: #374151;
+      font-weight: 600;
+      font-size: 14px;
+      color: #374151;
       white-space: nowrap;
     }
+
     .controls select {
-      padding: 9px 36px 9px 14px; border: 1px solid #cbd5e1;
-      border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px;
-      color: #1e293b; background: white;
-      appearance: none; -webkit-appearance: none;
+      padding: 9px 36px 9px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #1e293b;
+      background: white;
+      appearance: none;
+      -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8.825a.5.5 0 0 1-.354-.146l-3.5-3.5a.5.5 0 0 1 .708-.708L6 7.618l3.146-3.147a.5.5 0 0 1 .708.708l-3.5 3.5A.5.5 0 0 1 6 8.825z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center;
-      cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
       min-width: 240px;
     }
-    .controls select:hover { border-color: #6366f1; }
-    .controls select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+
+    .controls select:hover {
+      border-color: #6366f1;
+    }
+
+    .controls select:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
     /* ── Chart Description Card ── */
     .chart-info {
-      display: none; margin-bottom: 20px; padding: 18px 22px;
+      display: none;
+      margin-bottom: 20px;
+      padding: 18px 22px;
       background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
-      border-radius: 12px; border-left: 4px solid #6366f1;
+      border-radius: 12px;
+      border-left: 4px solid #6366f1;
       animation: fadeIn 0.3s ease;
     }
-    .chart-info.visible { display: block; }
+
+    .chart-info.visible {
+      display: block;
+    }
+
     .chart-info h3 {
-      margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #312e81;
+      margin: 0 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #312e81;
     }
+
     .chart-info p {
-      margin: 0; font-size: 13.5px; color: #4b5563; line-height: 1.6;
+      margin: 0;
+      font-size: 13.5px;
+      color: #4b5563;
+      line-height: 1.6;
     }
+
     .chart-info .interaction-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      margin-top: 10px; padding: 4px 12px;
-      background: rgba(99,102,241,0.1); border-radius: 6px;
-      font-size: 12px; font-weight: 600; color: #6366f1;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 4px 12px;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6366f1;
     }
+
     .chart-info .interaction-tag svg {
-      width: 14px; height: 14px; fill: currentColor;
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
+
 <body>
   <header class="header">
     <h1>&#128202; Sales Data Visualization</h1>
@@ -131,11 +273,15 @@
           <option value="trellis">3 · Trellis Histogram</option>
           <option value="chart4">4 · Stacked Bar (Hover)</option>
           <option value="chart5">5 · Scatter Plot (Brush)</option>
+          <option value="chart6">6 · Interactive Heatmap</option>
+          <option value="chart7">7 · Box Plot (Distribution)</option>
         </select>
       </div>
       <div id="chart-info" class="chart-info"></div>
       <div id="visualization">
-        <div class="loading"><div class="spinner"></div><span>Loading visualizations...</span></div>
+        <div class="loading">
+          <div class="spinner"></div><span>Loading visualizations...</span>
+        </div>
       </div>
     </div>
   </main>
@@ -158,78 +304,78 @@
       }
     };
 
-    const palette = ["#6366f1","#f43f5e","#10b981","#f59e0b","#3b82f6","#8b5cf6","#ec4899","#14b8a6","#f97316","#06b6d4"];
+    const palette = ["#6366f1", "#f43f5e", "#10b981", "#f59e0b", "#3b82f6", "#8b5cf6", "#ec4899", "#14b8a6", "#f97316", "#06b6d4"];
 
     // ── Chart 1: Donut Chart (Rep & Total with Tooltip) ──
     const donutSpec = {
-      "title": {"text": "1 · Donut Chart: Total Sales by Representative", "anchor": "start"},
+      "title": { "text": "1 · Donut Chart: Total Sales by Representative", "anchor": "start" },
       "width": 280, "height": 280,
       "transform": [
-        {"aggregate": [{"op": "sum", "field": "Total", "as": "TotalSales"}], "groupby": ["Rep"]},
-        {"window": [{"op": "sum", "field": "TotalSales", "as": "GrandTotal"}], "frame": [null, null]},
-        {"calculate": "datum.TotalSales / datum.GrandTotal * 100", "as": "Pct"}
+        { "aggregate": [{ "op": "sum", "field": "Total", "as": "TotalSales" }], "groupby": ["Rep"] },
+        { "window": [{ "op": "sum", "field": "TotalSales", "as": "GrandTotal" }], "frame": [null, null] },
+        { "calculate": "datum.TotalSales / datum.GrandTotal * 100", "as": "Pct" }
       ],
-      "mark": {"type": "arc", "innerRadius": 65, "outerRadius": 130, "padAngle": 0.02, "stroke": "#fff", "strokeWidth": 2},
+      "mark": { "type": "arc", "innerRadius": 65, "outerRadius": 130, "padAngle": 0.02, "stroke": "#fff", "strokeWidth": 2 },
       "encoding": {
-        "theta": {"field": "TotalSales", "type": "quantitative", "stack": true},
-        "color": {"field": "Rep", "type": "nominal", "legend": {"title": "Representative", "orient": "bottom", "columns": 4}},
+        "theta": { "field": "TotalSales", "type": "quantitative", "stack": true },
+        "color": { "field": "Rep", "type": "nominal", "legend": { "title": "Representative", "orient": "bottom", "columns": 4 } },
         "tooltip": [
-          {"field": "Rep", "type": "nominal", "title": "Representative"},
-          {"field": "TotalSales", "type": "quantitative", "title": "Total Sales ($)", "format": ",.2f"},
-          {"field": "Pct", "type": "quantitative", "title": "Share (%)", "format": ".1f"}
+          { "field": "Rep", "type": "nominal", "title": "Representative" },
+          { "field": "TotalSales", "type": "quantitative", "title": "Total Sales ($)", "format": ",.2f" },
+          { "field": "Pct", "type": "quantitative", "title": "Share (%)", "format": ".1f" }
         ]
       }
     };
 
     // ── Chart 2: Streamgraph (Total over time by Item, colored by Item) ──
     const streamSpec = {
-      "title": {"text": "2 · Streamgraph: Total Sales Over Time by Item", "anchor": "start"},
+      "title": { "text": "2 · Streamgraph: Total Sales Over Time by Item", "anchor": "start" },
       "width": 520, "height": 280,
       "transform": [
-        {"timeUnit": "yearmonth", "field": "OrderDate", "as": "Month"},
-        {"aggregate": [{"op": "sum", "field": "Total", "as": "MonthlyTotal"}], "groupby": ["Month", "Item"]}
+        { "timeUnit": "yearmonth", "field": "OrderDate", "as": "Month" },
+        { "aggregate": [{ "op": "sum", "field": "Total", "as": "MonthlyTotal" }], "groupby": ["Month", "Item"] }
       ],
-      "mark": {"type": "area", "interpolate": "basis", "opacity": 0.85},
+      "mark": { "type": "area", "interpolate": "basis", "opacity": 0.85 },
       "encoding": {
-        "x": {"field": "Month", "type": "temporal", "axis": {"title": "Date", "format": "%b %Y", "labelAngle": -45, "grid": false}},
-        "y": {"field": "MonthlyTotal", "type": "quantitative", "stack": "center", "axis": {"title": "Total Sales ($)"}},
-        "color": {"field": "Item", "type": "nominal", "legend": {"title": "Item"}},
+        "x": { "field": "Month", "type": "temporal", "axis": { "title": "Date", "format": "%b %Y", "labelAngle": -45, "grid": false } },
+        "y": { "field": "MonthlyTotal", "type": "quantitative", "stack": "center", "axis": { "title": "Total Sales ($)" } },
+        "color": { "field": "Item", "type": "nominal", "legend": { "title": "Item" } },
         "tooltip": [
-          {"field": "Item", "type": "nominal"},
-          {"field": "Month", "type": "temporal", "title": "Month", "format": "%b %Y"},
-          {"field": "MonthlyTotal", "type": "quantitative", "title": "Sales ($)", "format": ",.2f"}
+          { "field": "Item", "type": "nominal" },
+          { "field": "Month", "type": "temporal", "title": "Month", "format": "%b %Y" },
+          { "field": "MonthlyTotal", "type": "quantitative", "title": "Sales ($)", "format": ",.2f" }
         ]
       }
     };
 
     // ── Chart 3: Trellis Histogram of Units with Mean Overlay ──
     const trellisSpec = {
-      "title": {"text": "3 · Trellis Histogram of Units by Item (with Mean Overlay)", "anchor": "start"},
-      "facet": {"field": "Item", "type": "nominal", "columns": 5, "header": {"labelFontSize": 13, "labelFontWeight": "bold", "title": null}},
+      "title": { "text": "3 · Trellis Histogram of Units by Item (with Mean Overlay)", "anchor": "start" },
+      "facet": { "field": "Item", "type": "nominal", "columns": 5, "header": { "labelFontSize": 13, "labelFontWeight": "bold", "title": null } },
       "spec": {
         "width": 170, "height": 150,
         "layer": [
           {
-            "mark": {"type": "bar", "tooltip": true, "cornerRadiusTopLeft": 3, "cornerRadiusTopRight": 3},
+            "mark": { "type": "bar", "tooltip": true, "cornerRadiusTopLeft": 3, "cornerRadiusTopRight": 3 },
             "encoding": {
-              "x": {"bin": {"maxbins": 8}, "field": "Units", "title": "Units"},
-              "y": {"aggregate": "count", "title": "Frequency"},
-              "color": {"value": "#6366f1"}, "opacity": {"value": 0.8}
+              "x": { "bin": { "maxbins": 8 }, "field": "Units", "title": "Units" },
+              "y": { "aggregate": "count", "title": "Frequency" },
+              "color": { "value": "#6366f1" }, "opacity": { "value": 0.8 }
             }
           },
           {
-            "mark": {"type": "rule", "color": "#ef4444", "strokeWidth": 2.5, "strokeDash": [6, 3]},
+            "mark": { "type": "rule", "color": "#ef4444", "strokeWidth": 2.5, "strokeDash": [6, 3] },
             "encoding": {
-              "x": {"aggregate": "mean", "field": "Units"},
-              "tooltip": [{"aggregate": "mean", "field": "Units", "type": "quantitative", "title": "Mean Units", "format": ".1f"}]
+              "x": { "aggregate": "mean", "field": "Units" },
+              "tooltip": [{ "aggregate": "mean", "field": "Units", "type": "quantitative", "title": "Mean Units", "format": ".1f" }]
             }
           },
           {
-            "mark": {"type": "text", "color": "#ef4444", "dy": -8, "fontSize": 10, "fontWeight": 600, "align": "left", "dx": 4},
+            "mark": { "type": "text", "color": "#ef4444", "dy": -8, "fontSize": 10, "fontWeight": 600, "align": "left", "dx": 4 },
             "encoding": {
-              "x": {"aggregate": "mean", "field": "Units"},
-              "y": {"value": 0},
-              "text": {"aggregate": "mean", "field": "Units", "type": "quantitative", "format": ".0f"}
+              "x": { "aggregate": "mean", "field": "Units" },
+              "y": { "value": 0 },
+              "text": { "aggregate": "mean", "field": "Units", "type": "quantitative", "format": ".0f" }
             }
           }
         ]
@@ -238,54 +384,85 @@
 
     // ── Chart 4 (Custom): Stacked Bar by Region with Hover Highlight ──
     const customChart4 = {
-      "title": {"text": "4 · Sales by Region & Item (Hover to Highlight)", "anchor": "start"},
+      "title": { "text": "4 · Sales by Region & Item (Hover to Highlight)", "anchor": "start" },
       "width": 400, "height": 280,
       "params": [{
         "name": "repHover",
-        "select": {"type": "point", "fields": ["Item"], "on": "pointerover"}
+        "select": { "type": "point", "fields": ["Item"], "on": "pointerover" }
       }],
       "transform": [
-        {"aggregate": [{"op": "sum", "field": "Total", "as": "TotalSales"}], "groupby": ["Region", "Item"]}
+        { "aggregate": [{ "op": "sum", "field": "Total", "as": "TotalSales" }], "groupby": ["Region", "Item"] }
       ],
-      "mark": {"type": "bar", "cornerRadiusTopLeft": 4, "cornerRadiusTopRight": 4, "cursor": "pointer"},
+      "mark": { "type": "bar", "cornerRadiusTopLeft": 4, "cornerRadiusTopRight": 4, "cursor": "pointer" },
       "encoding": {
-        "x": {"field": "Region", "type": "nominal", "title": "Region"},
-        "y": {"field": "TotalSales", "type": "quantitative", "title": "Total Sales ($)", "stack": true},
-        "color": {"field": "Item", "type": "nominal", "legend": {"title": "Item"}},
-        "opacity": {"condition": {"param": "repHover", "value": 1}, "value": 0.25},
+        "x": { "field": "Region", "type": "nominal", "title": "Region" },
+        "y": { "field": "TotalSales", "type": "quantitative", "title": "Total Sales ($)", "stack": true },
+        "color": { "field": "Item", "type": "nominal", "legend": { "title": "Item" } },
+        "opacity": { "condition": { "param": "repHover", "value": 1 }, "value": 0.25 },
         "tooltip": [
-          {"field": "Region", "type": "nominal"},
-          {"field": "Item", "type": "nominal"},
-          {"field": "TotalSales", "type": "quantitative", "title": "Total ($)", "format": ",.2f"}
+          { "field": "Region", "type": "nominal" },
+          { "field": "Item", "type": "nominal" },
+          { "field": "TotalSales", "type": "quantitative", "title": "Total ($)", "format": ",.2f" }
         ]
       }
     };
 
     // ── Chart 5 (Custom): Scatter Plot with Brush Selection ──
     const customChart5 = {
-      "title": {"text": "5 · Units vs Unit Cost (Drag to Select Region)", "anchor": "start"},
+      "title": { "text": "5 · Units vs Unit Cost (Drag to Select Region)", "anchor": "start" },
       "width": 400, "height": 280,
-      "transform": [{"calculate": "datum['Unit Cost']", "as": "UnitCost"}],
+      "transform": [{ "calculate": "datum['Unit Cost']", "as": "UnitCost" }],
       "params": [{
         "name": "brush",
-        "select": {"type": "interval", "encodings": ["x", "y"]}
+        "select": { "type": "interval", "encodings": ["x", "y"] }
       }],
-      "mark": {"type": "circle", "size": 120, "stroke": "#fff", "strokeWidth": 1, "cursor": "crosshair"},
+      "mark": { "type": "circle", "size": 120, "stroke": "#fff", "strokeWidth": 1, "cursor": "crosshair" },
       "encoding": {
-        "x": {"field": "Units", "type": "quantitative", "title": "Units Sold", "scale": {"zero": false}},
-        "y": {"field": "UnitCost", "type": "quantitative", "title": "Unit Cost ($)", "scale": {"zero": false}},
+        "x": { "field": "Units", "type": "quantitative", "title": "Units Sold", "scale": { "zero": false } },
+        "y": { "field": "UnitCost", "type": "quantitative", "title": "Unit Cost ($)", "scale": { "zero": false } },
         "color": {
-          "condition": {"param": "brush", "field": "Item", "type": "nominal"},
+          "condition": { "param": "brush", "field": "Item", "type": "nominal" },
           "value": "#d1d5db"
         },
-        "size": {"field": "Total", "type": "quantitative", "scale": {"range": [40, 400]}, "legend": {"title": "Total ($)"}},
+        "size": { "field": "Total", "type": "quantitative", "scale": { "range": [40, 400] }, "legend": { "title": "Total ($)" } },
         "tooltip": [
-          {"field": "Item", "type": "nominal"},
-          {"field": "Rep", "type": "nominal", "title": "Rep"},
-          {"field": "Units", "type": "quantitative"},
-          {"field": "UnitCost", "type": "quantitative", "title": "Unit Cost ($)", "format": ".2f"},
-          {"field": "Total", "type": "quantitative", "title": "Total ($)", "format": ",.2f"}
+          { "field": "Item", "type": "nominal" },
+          { "field": "Rep", "type": "nominal", "title": "Rep" },
+          { "field": "Units", "type": "quantitative" },
+          { "field": "UnitCost", "type": "quantitative", "title": "Unit Cost ($)", "format": ".2f" },
+          { "field": "Total", "type": "quantitative", "title": "Total ($)", "format": ",.2f" }
         ]
+      }
+    };
+
+    // ── Chart 6 (Custom): Interactive Heatmap ──
+    const customChart6 = {
+      "title": { "text": "6 · Heatmap: Sales Rep Performance by Item", "anchor": "start" },
+      "width": 400, "height": 280,
+      "params": [{ "name": "hover", "select": { "type": "point", "on": "pointerover", "clear": "pointerout" } }],
+      "mark": { "type": "rect", "cornerRadius": 4, "cursor": "pointer" },
+      "encoding": {
+        "y": { "field": "Rep", "type": "nominal", "title": "Representative" },
+        "x": { "field": "Item", "type": "nominal", "title": "Item", "axis": { "labelAngle": -45 } },
+        "color": { "aggregate": "sum", "field": "Total", "type": "quantitative", "title": "Total Sales ($)", "scale": { "scheme": "purpleblue" } },
+        "opacity": { "condition": { "param": "hover", "value": 1 }, "value": 0.4 },
+        "tooltip": [
+          { "field": "Rep", "type": "nominal", "title": "Rep" },
+          { "field": "Item", "type": "nominal", "title": "Item" },
+          { "aggregate": "sum", "field": "Total", "type": "quantitative", "title": "Total Sales", "format": ",.2f" }
+        ]
+      }
+    };
+
+    // ── Chart 7 (Custom): Box Plot ──
+    const customChart7 = {
+      "title": { "text": "7 · Box Plot: Order Value Distribution by Region", "anchor": "start" },
+      "width": 400, "height": 280,
+      "mark": { "type": "boxplot", "extent": "min-max", "size": 40 },
+      "encoding": {
+        "x": { "field": "Region", "type": "nominal", "title": "Region", "axis": { "labelAngle": 0 } },
+        "y": { "field": "Total", "type": "quantitative", "title": "Total Order Value ($)", "scale": { "zero": false } },
+        "color": { "field": "Region", "type": "nominal", "legend": null }
       }
     };
 
@@ -294,15 +471,15 @@
       "font": "Inter, sans-serif",
       "padding": 20,
       "background": "transparent",
-      "title": {"fontSize": 15, "fontWeight": 600, "color": "#1e293b", "offset": 12},
+      "title": { "fontSize": 15, "fontWeight": 600, "color": "#1e293b", "offset": 12 },
       "axis": {
         "labelFontSize": 11, "titleFontSize": 13, "titleColor": "#374151",
         "labelColor": "#6b7280", "gridColor": "#f1f5f9", "domainColor": "#cbd5e1", "tickColor": "#cbd5e1"
       },
-      "legend": {"labelFontSize": 11, "titleFontSize": 12, "titleColor": "#374151", "symbolSize": 80},
-      "view": {"stroke": "transparent"},
-      "range": {"category": palette},
-      "arc": {"stroke": "#fff", "strokeWidth": 2}
+      "legend": { "labelFontSize": 11, "titleFontSize": 12, "titleColor": "#374151", "symbolSize": 80 },
+      "view": { "stroke": "transparent" },
+      "range": { "category": palette },
+      "arc": { "stroke": "#fff", "strokeWidth": 2 }
     };
 
     // ══════ MULTIVIEW: All 5 charts concatenated via vconcat + hconcat ══════
@@ -312,11 +489,12 @@
       "data": dataSource,
       "spacing": 40,
       "vconcat": [
-        {"spacing": 50, "hconcat": [donutSpec, streamSpec], "resolve": {"legend": {"color": "independent"}, "scale": {"color": "independent"}}},
+        { "spacing": 50, "hconcat": [donutSpec, streamSpec], "resolve": { "legend": { "color": "independent" }, "scale": { "color": "independent" } } },
         trellisSpec,
-        {"spacing": 50, "hconcat": [customChart4, customChart5], "resolve": {"legend": {"color": "independent", "size": "independent"}, "scale": {"color": "independent", "size": "independent"}}}
+        { "spacing": 50, "hconcat": [customChart4, customChart5], "resolve": { "legend": { "color": "independent", "size": "independent" }, "scale": { "color": "independent", "size": "independent" } } },
+        { "spacing": 50, "hconcat": [customChart6, customChart7], "resolve": { "legend": { "color": "independent" }, "scale": { "color": "independent" } } }
       ],
-      "resolve": {"legend": {"color": "independent", "size": "independent"}, "scale": {"color": "independent", "size": "independent"}},
+      "resolve": { "legend": { "color": "independent", "size": "independent" }, "scale": { "color": "independent", "size": "independent" } },
       "config": vlConfig
     };
 
@@ -364,6 +542,18 @@
         desc: "This bubble chart plots each sale transaction with Units Sold on the x-axis and Unit Cost on the y-axis. Bubble size encodes the Total sale value, and color encodes the Item type. It helps identify pricing patterns and volume-cost relationships across products.",
         interaction: "Interval Brush Selection",
         interactionDesc: "Click and drag to draw a rectangular selection region on the chart. Points inside the selection are colored by Item; points outside turn grey. This lets you focus on specific price-volume ranges. Click elsewhere to clear the selection."
+      },
+      chart6: {
+        title: "Heatmap — Sales Rep Performance by Item",
+        desc: "This heatmap displays total sales aggregated by Representative (rows) and Item (columns). The color intensity of each cell represents the sales volume, allowing quick discovery of the most profitable rep-item combinations.",
+        interaction: "Hover Highlight & Tooltip",
+        interactionDesc: "Hover over any cell to bring it to full opacity while dimming the rest of the matrix. The tooltip provides exact sales figures for that combination."
+      },
+      chart7: {
+        title: "Box Plot — Order Value Distribution by Region",
+        desc: "This box plot visualizes the statistical distribution of Total Order Values across different Regions. It clearly shows the median, quartiles (the box), and the full spread of data from minimum to maximum (the whiskers), highlighting outliers.",
+        interaction: "Statistical Tooltip",
+        interactionDesc: "Hover over any part of the box or whiskers to see a detailed statistical summary for that region, including Max, Min, Median, Q1, and Q3."
       }
     };
 
@@ -409,9 +599,13 @@
         spec = makeSingleSpec(customChart4, 700, 400);
       } else if (key === 'chart5') {
         spec = makeSingleSpec(customChart5, 700, 400);
+      } else if (key === 'chart6') {
+        spec = makeSingleSpec(customChart6, 600, 400);
+      } else if (key === 'chart7') {
+        spec = makeSingleSpec(customChart7, 500, 400);
       }
 
-      vegaEmbed('#visualization', spec, {actions: false})
+      vegaEmbed('#visualization', spec, { actions: false })
         .then(() => { document.querySelector('.loading')?.remove(); })
         .catch(err => {
           visEl.innerHTML = '<p style="color:#ef4444;text-align:center;padding:40px;">Error: ' + err.message + '</p>';
@@ -423,4 +617,5 @@
     switchView('multiview');
   </script>
 </body>
+
 </html>
